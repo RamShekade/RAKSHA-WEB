@@ -2,6 +2,7 @@ import './App.css';
 import Dashboard from './Pages/dashboard';
 import Database from './Pages/database';
 import LiveVideoStream from './Pages/livestream';
+import SOSAlertPage from './Pages/sos_alert';
 
 import Layout from './Layout';
 import {
@@ -20,6 +21,7 @@ function App() {
           <Route index element={<Dashboard />} /> {/* Default route */}
           <Route path="database" element={<Database />} />
           <Route path="live" element={<LiveVideoStream />}/>
+          <Route path="alerts" element={<SOSAlertPage />}/>
         </Route>
       </Routes>
     </Router>

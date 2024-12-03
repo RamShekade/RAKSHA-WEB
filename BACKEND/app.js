@@ -14,9 +14,7 @@ app.use(cors({
 // Socket.IO server with CORS settings
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173', // Your frontend's URL
-    methods: ['GET', 'POST'],        // Allowed methods
-    credentials: true                // Allow credentials
+    origin: "*",
   }
 });
 
@@ -41,6 +39,11 @@ io.on('connection', (socket) => {
   socket.on('video-stream', ({ cameraId, data }) => {
     // Broadcast the data to viewers of the specific camera
     io.emit(`display-stream-${cameraId}`, data);
+  });
+  socket.on('userDetails', (data) => {
+    console.log('Received user details:', data);
+    // Process the data as needed
+    io.emit('alert-userDetails', data);
   });
 
   socket.on('disconnect', () => {
