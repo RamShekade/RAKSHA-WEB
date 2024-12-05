@@ -3,6 +3,7 @@ import Dashboard from './Pages/dashboard';
 import Database from './Pages/database';
 import LiveVideoStream from './Pages/livestream';
 import SOSAlertPage from './Pages/sos_alert';
+import CameraApp from './Pages/image';
 
 import Layout from './Layout';
 import {
@@ -22,6 +23,7 @@ function App() {
           <Route path="database" element={<Database />} />
           <Route path="live" element={<LiveVideoStream />}/>
           <Route path="alerts" element={<SOSAlertPage />}/>
+          <Route path="img" element={<CameraApp />}/>
         </Route>
       </Routes>
     </Router>
