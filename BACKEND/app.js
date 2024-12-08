@@ -37,33 +37,38 @@ app.get('/display', (req, res) => {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  // Relay video stream data from specific cameras
-  socket.on('video-stream', ({ cameraId, data }) => {
-    // Broadcast the data to viewers of the specific camera
-    io.emit(`display-stream-${cameraId}`, data);
-  });
+  socket.on('video-stream', async ({ cameraId, data }) => {
+    try {
+        // Send frame to Flask for processing
+        const response = await axios.post('http://localhost:5000/process-frame', {
+            image: data, // The Base64 frame
+        });
+
+        // Broadcast processed result to viewers
+        io.emit(`processed-stream-${cameraId}`, response.data);
+    } catch (error) {
+        console.error('Error processing frame:', error.message);
+    }
+});
+
   socket.on('userDetails', (data) => {
     console.log('Received user details:', data);
     // Process the data as needed
     io.emit('alert-userDetails', data);
   });
 
-  socket.on("sendImage", (data) => {
+  socket.on("sendVideo", (data) => {
     const { image, name } = data;
-    const buffer = Buffer.from(image, "base64");
-    const uploadDir = path.join(__dirname, "uploads");
+    const buffer = Buffer.from(image, "base64"); // Convert Base64 to a Buffer
+    const uploadDir = path.join(__dirname, "uploads"); // Ensure this directory exists
     const filePath = path.join(uploadDir, name);
-   console.log(buffer);
-    fs.writeFile(filePath, buffer, (err) => {
-      if (err) {
-        console.error("Error saving image:", err);
-        socket.emit("uploadStatus", { success: false });
-      } else {
-        console.log("Image saved successfully");
-        socket.emit("uploadStatus", { success: true });
-      }
-    });
-    socket.broadcast.emit('receiveImage', { image, name });
+  
+    console.log(`Received video data for: ${name}`);
+  
+    console.log(`Video received: ${Buffer.byteLength(image, "base64")} bytes`);
+
+    socket.broadcast.emit("receiveVideo", { image: buffer, name });
+
 
   
   });
