@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Database.css';
+import './database.css';
 import Video1 from '../assets/Videos/Video_1.mp4';
 import Video2 from '../assets/Videos/Video_2.mp4';
 import Video3 from '../assets/Videos/Video_3.mp4';
